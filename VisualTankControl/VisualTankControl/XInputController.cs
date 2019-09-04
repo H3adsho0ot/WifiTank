@@ -15,7 +15,7 @@ namespace VisualTankControl
         public bool connected = false;
         public int deadband = 2500;
         public Point leftThumb, rightThumb = new Point(0, 0);
-        public float leftTrigger, rightTrigger;
+        public int leftTrigger, rightTrigger;
 
         public XInputController()
         {

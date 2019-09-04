@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 namespace VisualTankControl
 {
-    public partial class frmMain : Form
+    public partial class FrmMain : Form
     {
         private SerialPort _serialPort;
         private Chassis _chassis;
@@ -25,7 +25,7 @@ namespace VisualTankControl
         private int _controllerRefreshRate = 60;
         private System.Threading.Timer _controllerTimer;
 
-        public frmMain()
+        public FrmMain()
         {
             InitializeComponent();
         }
@@ -116,7 +116,7 @@ namespace VisualTankControl
         {
             if (_serialPort.IsOpen)
             {
-                _serialPort.Open();
+                _serialPort.Close();
 
                 btnSerialOpen.Enabled = true;
                 btnSerialClose.Enabled = false;
@@ -147,7 +147,30 @@ namespace VisualTankControl
         {
             if(_controller.connected)
             {
-                Debug.Write(_controller.rightThumb.X);
+                _controller.Update();
+                
+
+                if (_controller.rightTrigger > 0)
+                {
+                    _chassis.leftChainForward = true;
+                    _chassis.rightChainForward = true;
+                    _chassis.leftChainSpeed = remap(_controller.rightTrigger, 0, 255, 0, 100);
+                    _chassis.rightChainSpeed = remap(_controller.rightTrigger, 0, 255, 0, 100);
+                }
+                else if (_controller.leftTrigger > 0)
+                {
+                    _chassis.leftChainForward = false;
+                    _chassis.rightChainForward = false;
+                    _chassis.leftChainSpeed = remap(_controller.leftTrigger, 0, 255, 0, 100);
+                    _chassis.rightChainSpeed = remap(_controller.leftTrigger, 0, 255, 0, 100);
+                }
+                else
+                {
+                    _chassis.leftChainSpeed = 0;
+                    _chassis.rightChainSpeed = 0;
+                }
+
+                sendJson();
             }
         }
 
@@ -162,6 +185,31 @@ namespace VisualTankControl
             cmbSerial.Items.Clear();
             cmbSerial.Items.AddRange(SerialPort.GetPortNames());
             cmbSerial.SelectedItem = cmbSerial.Items[0];
+        }
+
+        private void tbTankMaxSpeed_KeyDown(object sender, KeyEventArgs e)
+        {
+            Form1_KeyDown(sender, e);
+        }
+
+        private void tbTankMaxSpeed_KeyUp(object sender, KeyEventArgs e)
+        {
+            Form1_KeyUp(sender, e);
+        }
+
+        public int remap(float from, float fromMin, float fromMax, float toMin, float toMax)
+        {
+            var fromAbs = from - fromMin;
+            var fromMaxAbs = fromMax - fromMin;
+
+            var normal = fromAbs / fromMaxAbs;
+
+            var toMaxAbs = toMax - toMin;
+            var toAbs = toMaxAbs * normal;
+
+            var to = toAbs + toMin;
+
+            return (int)to;
         }
     }
 }
