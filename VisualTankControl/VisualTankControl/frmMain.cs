@@ -25,40 +25,43 @@ namespace VisualTankControl
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            switch(e.KeyCode)
-            { 
-                case Keys.Up:
-                    chassis.leftChainForward = true;
-                    chassis.rightChainForward = true;
-                    chassis.leftChainSpeed = speed;
-                    chassis.rightChainSpeed = speed;
+            if (serialPort.IsOpen)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.W:
+                        chassis.leftChainForward = true;
+                        chassis.rightChainForward = true;
+                        chassis.leftChainSpeed = speed;
+                        chassis.rightChainSpeed = speed;
 
-                    sendJson();
-                    break;
-                case Keys.Down:
-                    chassis.leftChainForward = false;
-                    chassis.rightChainForward = false;
-                    chassis.leftChainSpeed = speed;
-                    chassis.rightChainSpeed = speed;
+                        sendJson();
+                        break;
+                    case Keys.S:
+                        chassis.leftChainForward = false;
+                        chassis.rightChainForward = false;
+                        chassis.leftChainSpeed = speed;
+                        chassis.rightChainSpeed = speed;
 
-                    sendJson();
-                    break;
-                case Keys.Right:
-                    chassis.leftChainForward = false;
-                    chassis.rightChainForward = true;
-                    chassis.leftChainSpeed = speed;
-                    chassis.rightChainSpeed = speed;
+                        sendJson();
+                        break;
+                    case Keys.D:
+                        chassis.leftChainForward = false;
+                        chassis.rightChainForward = true;
+                        chassis.leftChainSpeed = speed;
+                        chassis.rightChainSpeed = speed;
 
-                    sendJson();
-                    break;
-                case Keys.Left:
-                    chassis.leftChainForward = true;
-                    chassis.rightChainForward = false;
-                    chassis.leftChainSpeed = speed;
-                    chassis.rightChainSpeed = speed;
+                        sendJson();
+                        break;
+                    case Keys.A:
+                        chassis.leftChainForward = true;
+                        chassis.rightChainForward = false;
+                        chassis.leftChainSpeed = speed;
+                        chassis.rightChainSpeed = speed;
 
-                    sendJson();
-                    break;
+                        sendJson();
+                        break;
+                }
             }
         }
 
@@ -71,7 +74,7 @@ namespace VisualTankControl
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            if (e.KeyCode == Keys.W || e.KeyCode == Keys.S || e.KeyCode == Keys.A || e.KeyCode == Keys.D)
             {
                 chassis.leftChainSpeed = 0;
                 chassis.rightChainSpeed = 0;
@@ -126,11 +129,20 @@ namespace VisualTankControl
             chassis = new Chassis();
 
             tbTankMaxSpeed.Value = speed;
+            lblTankMaxSpeedVal.Text = speed.ToString();
         }
 
         private void tbTankMaxSpeed_Scroll(object sender, EventArgs e)
         {
             speed = tbTankMaxSpeed.Value;
+            lblTankMaxSpeedVal.Text = speed.ToString();
+        }
+
+        private void btnSerialUpdate_Click(object sender, EventArgs e)
+        {
+            cmbSerial.Items.Clear();
+            cmbSerial.Items.AddRange(SerialPort.GetPortNames());
+            cmbSerial.SelectedItem = cmbSerial.Items[0];
         }
     }
 }

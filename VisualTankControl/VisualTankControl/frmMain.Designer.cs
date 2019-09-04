@@ -37,6 +37,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tbTankMaxSpeed = new System.Windows.Forms.TrackBar();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblTankMaxSpeedVal = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).BeginInit();
@@ -44,9 +45,9 @@
             // 
             // btnSerialOpen
             // 
-            this.btnSerialOpen.Location = new System.Drawing.Point(164, 17);
+            this.btnSerialOpen.Location = new System.Drawing.Point(164, 18);
             this.btnSerialOpen.Name = "btnSerialOpen";
-            this.btnSerialOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnSerialOpen.Size = new System.Drawing.Size(75, 22);
             this.btnSerialOpen.TabIndex = 0;
             this.btnSerialOpen.Text = "Open";
             this.btnSerialOpen.UseVisualStyleBackColor = true;
@@ -76,9 +77,9 @@
             // btnSerialClose
             // 
             this.btnSerialClose.Enabled = false;
-            this.btnSerialClose.Location = new System.Drawing.Point(245, 17);
+            this.btnSerialClose.Location = new System.Drawing.Point(245, 18);
             this.btnSerialClose.Name = "btnSerialClose";
-            this.btnSerialClose.Size = new System.Drawing.Size(75, 23);
+            this.btnSerialClose.Size = new System.Drawing.Size(75, 22);
             this.btnSerialClose.TabIndex = 1;
             this.btnSerialClose.Text = "Close";
             this.btnSerialClose.UseVisualStyleBackColor = true;
@@ -86,15 +87,17 @@
             // 
             // btnSerialUpdate
             // 
-            this.btnSerialUpdate.Location = new System.Drawing.Point(8, 19);
+            this.btnSerialUpdate.Location = new System.Drawing.Point(9, 19);
             this.btnSerialUpdate.Name = "btnSerialUpdate";
-            this.btnSerialUpdate.Size = new System.Drawing.Size(23, 23);
+            this.btnSerialUpdate.Size = new System.Drawing.Size(22, 22);
             this.btnSerialUpdate.TabIndex = 3;
             this.btnSerialUpdate.Text = "↻";
             this.btnSerialUpdate.UseVisualStyleBackColor = true;
+            this.btnSerialUpdate.Click += new System.EventHandler(this.btnSerialUpdate_Click);
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.lblTankMaxSpeedVal);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.tbTankMaxSpeed);
             this.groupBox2.Location = new System.Drawing.Point(12, 71);
@@ -121,6 +124,15 @@
             this.label1.Size = new System.Drawing.Size(64, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Max Speed:";
+            // 
+            // lblTankMaxSpeedVal
+            // 
+            this.lblTankMaxSpeedVal.AutoSize = true;
+            this.lblTankMaxSpeedVal.Location = new System.Drawing.Point(6, 32);
+            this.lblTankMaxSpeedVal.Name = "lblTankMaxSpeedVal";
+            this.lblTankMaxSpeedVal.Size = new System.Drawing.Size(35, 13);
+            this.lblTankMaxSpeedVal.TabIndex = 5;
+            this.lblTankMaxSpeedVal.Text = "label2";
             // 
             // frmMain
             // 
@@ -154,6 +166,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar tbTankMaxSpeed;
+        private System.Windows.Forms.Label lblTankMaxSpeedVal;
     }
 }
 
