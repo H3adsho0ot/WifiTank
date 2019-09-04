@@ -12,22 +12,15 @@ using System.Windows.Forms;
 
 namespace VisualTankControl
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
         private SerialPort serialPort;
         private Chassis chassis;
-        private int speed = 50;
+        private int speed = 60;
 
-        public Form1()
+        public frmMain()
         {
-            InitializeComponent();
-            serialPort = new SerialPort();
-            serialPort.BaudRate = 1000000;
-            serialPort.PortName = "COM8";
-
-            serialPort.Open();
-
-            chassis = new Chassis();           
+            InitializeComponent();            
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -89,7 +82,55 @@ namespace VisualTankControl
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            serialPort.Close();
+            if (serialPort.IsOpen)
+            {
+                serialPort.Close();
+            }
+        }
+
+        private void btnSerialOpen_Click(object sender, EventArgs e)
+        {
+            if(!serialPort.IsOpen)
+            {
+                serialPort.PortName = cmbSerial.SelectedItem.ToString();
+                serialPort.Open();
+
+                btnSerialOpen.Enabled = false;
+                btnSerialClose.Enabled = true;
+                cmbSerial.Enabled = false;
+                btnSerialUpdate.Enabled = false;
+            }
+        }
+
+        private void btnSerialClose_Click(object sender, EventArgs e)
+        {
+            if (serialPort.IsOpen)
+            {
+                serialPort.Open();
+
+                btnSerialOpen.Enabled = true;
+                btnSerialClose.Enabled = false;
+                cmbSerial.Enabled = true;
+                btnSerialUpdate.Enabled = true;
+            }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            serialPort = new SerialPort();
+            serialPort.BaudRate = 1000000;
+
+            cmbSerial.Items.AddRange(SerialPort.GetPortNames());
+            cmbSerial.SelectedItem = cmbSerial.Items[0];
+
+            chassis = new Chassis();
+
+            tbTankMaxSpeed.Value = speed;
+        }
+
+        private void tbTankMaxSpeed_Scroll(object sender, EventArgs e)
+        {
+            speed = tbTankMaxSpeed.Value;
         }
     }
 }
