@@ -14,70 +14,70 @@ namespace VisualTankControl
 {
     public partial class frmMain : Form
     {
-        private SerialPort serialPort;
-        private Chassis chassis;
-        private int speed = 60;
+        private SerialPort _serialPort;
+        private Chassis _chassis;
+        private int _maxSpeed = 60;
 
         public frmMain()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (serialPort.IsOpen)
+            switch (e.KeyCode)
             {
-                switch (e.KeyCode)
-                {
-                    case Keys.W:
-                        chassis.leftChainForward = true;
-                        chassis.rightChainForward = true;
-                        chassis.leftChainSpeed = speed;
-                        chassis.rightChainSpeed = speed;
+                case Keys.W:
+                    _chassis.leftChainForward = true;
+                    _chassis.rightChainForward = true;
+                    _chassis.leftChainSpeed = _maxSpeed;
+                    _chassis.rightChainSpeed = _maxSpeed;
 
-                        sendJson();
-                        break;
-                    case Keys.S:
-                        chassis.leftChainForward = false;
-                        chassis.rightChainForward = false;
-                        chassis.leftChainSpeed = speed;
-                        chassis.rightChainSpeed = speed;
+                    sendJson();
+                    break;
+                case Keys.S:
+                    _chassis.leftChainForward = false;
+                    _chassis.rightChainForward = false;
+                    _chassis.leftChainSpeed = _maxSpeed;
+                    _chassis.rightChainSpeed = _maxSpeed;
 
-                        sendJson();
-                        break;
-                    case Keys.D:
-                        chassis.leftChainForward = false;
-                        chassis.rightChainForward = true;
-                        chassis.leftChainSpeed = speed;
-                        chassis.rightChainSpeed = speed;
+                    sendJson();
+                    break;
+                case Keys.D:
+                    _chassis.leftChainForward = false;
+                    _chassis.rightChainForward = true;
+                    _chassis.leftChainSpeed = _maxSpeed;
+                    _chassis.rightChainSpeed = _maxSpeed;
 
-                        sendJson();
-                        break;
-                    case Keys.A:
-                        chassis.leftChainForward = true;
-                        chassis.rightChainForward = false;
-                        chassis.leftChainSpeed = speed;
-                        chassis.rightChainSpeed = speed;
+                    sendJson();
+                    break;
+                case Keys.A:
+                    _chassis.leftChainForward = true;
+                    _chassis.rightChainForward = false;
+                    _chassis.leftChainSpeed = _maxSpeed;
+                    _chassis.rightChainSpeed = _maxSpeed;
 
-                        sendJson();
-                        break;
-                }
+                    sendJson();
+                    break;
             }
         }
 
         private void sendJson()
         {
-            ASCIIEncoding enc = new ASCIIEncoding();
-            byte[] data = enc.GetBytes(JsonConvert.SerializeObject(chassis) + Environment.NewLine);
-            serialPort.Write(data, 0, data.Length);
+            if (_serialPort.IsOpen)
+            {
+                ASCIIEncoding enc = new ASCIIEncoding();
+                byte[] data = enc.GetBytes(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
+                _serialPort.Write(data, 0, data.Length);
+            }
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.W || e.KeyCode == Keys.S || e.KeyCode == Keys.A || e.KeyCode == Keys.D)
             {
-                chassis.leftChainSpeed = 0;
-                chassis.rightChainSpeed = 0;
+                _chassis.leftChainSpeed = 0;
+                _chassis.rightChainSpeed = 0;
 
                 sendJson();
             }
@@ -85,18 +85,18 @@ namespace VisualTankControl
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (serialPort.IsOpen)
+            if (_serialPort.IsOpen)
             {
-                serialPort.Close();
+                _serialPort.Close();
             }
         }
 
         private void btnSerialOpen_Click(object sender, EventArgs e)
         {
-            if(!serialPort.IsOpen)
+            if (!_serialPort.IsOpen)
             {
-                serialPort.PortName = cmbSerial.SelectedItem.ToString();
-                serialPort.Open();
+                _serialPort.PortName = cmbSerial.SelectedItem.ToString();
+                _serialPort.Open();
 
                 btnSerialOpen.Enabled = false;
                 btnSerialClose.Enabled = true;
@@ -107,9 +107,9 @@ namespace VisualTankControl
 
         private void btnSerialClose_Click(object sender, EventArgs e)
         {
-            if (serialPort.IsOpen)
+            if (_serialPort.IsOpen)
             {
-                serialPort.Open();
+                _serialPort.Open();
 
                 btnSerialOpen.Enabled = true;
                 btnSerialClose.Enabled = false;
@@ -120,22 +120,22 @@ namespace VisualTankControl
 
         private void frmMain_Load(object sender, EventArgs e)
         {
-            serialPort = new SerialPort();
-            serialPort.BaudRate = 1000000;
+            _serialPort = new SerialPort();
+            _serialPort.BaudRate = 1000000;
 
             cmbSerial.Items.AddRange(SerialPort.GetPortNames());
             cmbSerial.SelectedItem = cmbSerial.Items[0];
 
-            chassis = new Chassis();
+            _chassis = new Chassis();
 
-            tbTankMaxSpeed.Value = speed;
-            lblTankMaxSpeedVal.Text = speed.ToString();
+            tbTankMaxSpeed.Value = _maxSpeed;
+            lblTankMaxSpeedVal.Text = _maxSpeed.ToString();
         }
 
         private void tbTankMaxSpeed_Scroll(object sender, EventArgs e)
         {
-            speed = tbTankMaxSpeed.Value;
-            lblTankMaxSpeedVal.Text = speed.ToString();
+            _maxSpeed = tbTankMaxSpeed.Value;
+            lblTankMaxSpeedVal.Text = _maxSpeed.ToString();
         }
 
         private void btnSerialUpdate_Click(object sender, EventArgs e)
