@@ -7,7 +7,7 @@
   const int in2 = 10;   //digitalPin
   
   //chain left
-  const int ENB = 11;   //digitalPin  + PWM
+  const int ENB = 11;   //digitalPin + PWM
   const int in3 = 13;   //digitalPin
   const int in4 = 12;   //digitalPin
 
