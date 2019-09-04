@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
+using System.Diagnostics;
 
 namespace VisualTankControl
 {
@@ -16,7 +18,12 @@ namespace VisualTankControl
     {
         private SerialPort _serialPort;
         private Chassis _chassis;
+
         private int _maxSpeed = 60;
+
+        private XInputController _controller;
+        private int _controllerRefreshRate = 60;
+        private System.Threading.Timer _controllerTimer;
 
         public frmMain()
         {
@@ -130,6 +137,18 @@ namespace VisualTankControl
 
             tbTankMaxSpeed.Value = _maxSpeed;
             lblTankMaxSpeedVal.Text = _maxSpeed.ToString();
+
+            _controller = new XInputController();
+            _controllerTimer = new System.Threading.Timer(obj => manageControllerInput());
+            _controllerTimer.Change(0, 1000 / _controllerRefreshRate);
+        }
+
+        private void manageControllerInput()
+        {
+            if(_controller.connected)
+            {
+                Debug.Write(_controller.rightThumb.X);
+            }
         }
 
         private void tbTankMaxSpeed_Scroll(object sender, EventArgs e)
