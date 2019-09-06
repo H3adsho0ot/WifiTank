@@ -64,6 +64,24 @@ class Chassis
     }
   
     //map speed
+    if(rightChainSpeed < 0)
+    {
+      rightChainSpeed = 0;
+    }
+    else if(rightChainSpeed > 100)
+    {
+      rightChainSpeed = 100;
+    }
+
+    if(leftChainSpeed < 0)
+    {
+      leftChainSpeed = 0;
+    }
+    else if(leftChainSpeed > 100)
+    {
+      leftChainSpeed = 100;
+    }
+    
     rightChainSpeed = map(rightChainSpeed, 0, 100, 0, 255); 
     leftChainSpeed = map(leftChainSpeed, 0, 100, 0, 255);
   
