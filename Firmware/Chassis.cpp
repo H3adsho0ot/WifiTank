@@ -2,22 +2,38 @@
 #define Chassis_cpp_
 
 #include "Arduino.h"
-#include "Config.h"
 
 class Chassis
 {
+  private:
+  int _ENA;
+  int _in1;  
+  int _in2; 
+  
+  //chain left
+  int _ENB;
+  int _in3;
+  int _in4;
+  
   public:
-  Chassis()
-  {}
+  Chassis(int ENA, int in1, int in2, int in3, int in4, int ENB)
+  {
+    _ENA = ENA;
+    _in1 = in1;
+    _in2 = in2;
+    _in3 = in3;
+    _in4 = in4;
+    _ENB = ENB;
+  }
   
   void setup()
   {
-    pinMode(ENA, OUTPUT);    
-    pinMode(ENB, OUTPUT);
-    pinMode(in1, OUTPUT);
-    pinMode(in2, OUTPUT);
-    pinMode(in3, OUTPUT);
-    pinMode(in4, OUTPUT);
+    pinMode(_ENA, OUTPUT);    
+    pinMode(_ENB, OUTPUT);
+    pinMode(_in1, OUTPUT);
+    pinMode(_in2, OUTPUT);
+    pinMode(_in3, OUTPUT);
+    pinMode(_in4, OUTPUT);
   }
   
   void drive(int leftChainSpeed, bool leftChainForward, int rightChainSpeed, bool rightChainForward)
@@ -26,25 +42,25 @@ class Chassis
     //right chain
     if(leftChainForward)
     {
-      digitalWrite(in1, HIGH);
-      digitalWrite(in2, LOW);
+      digitalWrite(_in1, HIGH);
+      digitalWrite(_in2, LOW);
     }
     else
     {
-      digitalWrite(in1, LOW);
-      digitalWrite(in2, HIGH);
+      digitalWrite(_in1, LOW);
+      digitalWrite(_in2, HIGH);
     }
   
     //left chain
     if(rightChainForward)
     {
-      digitalWrite(in3, LOW);
-      digitalWrite(in4, HIGH);
+      digitalWrite(_in3, LOW);
+      digitalWrite(_in4, HIGH);
     }
     else
     {
-      digitalWrite(in3, HIGH);
-      digitalWrite(in4, LOW);
+      digitalWrite(_in3, HIGH);
+      digitalWrite(_in4, LOW);
     }
   
     //map speed
@@ -52,8 +68,8 @@ class Chassis
     leftChainSpeed = map(leftChainSpeed, 0, 100, 0, 255);
   
     //set speed
-    analogWrite(ENA, rightChainSpeed);
-    analogWrite(ENB, leftChainSpeed);
+    analogWrite(_ENA, rightChainSpeed);
+    analogWrite(_ENB, leftChainSpeed);
   }
 };
 
