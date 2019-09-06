@@ -36,7 +36,7 @@ class Chassis
     pinMode(_in4, OUTPUT);
   }
   
-  void drive(int leftChainSpeed, bool leftChainForward, int rightChainSpeed, bool rightChainForward)
+  void driveL298N(int leftChainSpeed, bool leftChainForward, int rightChainSpeed, bool rightChainForward)
   {
     //set directions
     //right chain
@@ -88,6 +88,56 @@ class Chassis
     //set speed
     analogWrite(_ENA, rightChainSpeed);
     analogWrite(_ENB, leftChainSpeed);
+  }
+
+  void driveDRV8833(int leftChainSpeed, bool leftChainForward, int rightChainSpeed, bool rightChainForward)
+  {  
+    //map speed
+    if(rightChainSpeed < 0)
+    {
+      rightChainSpeed = 0;
+    }
+    else if(rightChainSpeed > 100)
+    {
+      rightChainSpeed = 100;
+    }
+
+    if(leftChainSpeed < 0)
+    {
+      leftChainSpeed = 0;
+    }
+    else if(leftChainSpeed > 100)
+    {
+      leftChainSpeed = 100;
+    }
+    
+    rightChainSpeed = map(rightChainSpeed, 0, 100, 0, 255); 
+    leftChainSpeed = map(leftChainSpeed, 0, 100, 0, 255);
+  
+    //set speed & direction
+    //right chain
+    if(rightChainForward)
+    {
+      analogWrite(_in1, rightChainSpeed);
+      digitalWrite(_in2, LOW);
+    }
+    else
+    {
+      digitalWrite(_in1, LOW);
+      analogWrite(_in2, rightChainSpeed);
+    }
+  
+    //left chain
+    if(leftChainForward)
+    {
+      digitalWrite(_in3, LOW);
+      analogWrite(_in4, leftChainSpeed);
+    }
+    else
+    {
+      analogWrite(_in3, leftChainSpeed);
+      digitalWrite(_in4, LOW);
+    }
   }
 };
 

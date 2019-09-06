@@ -19,7 +19,8 @@ namespace VisualTankControl
         private SerialPort _serialPort;
         private Chassis _chassis;
 
-        private int _maxSpeed = 60;
+        private int _maxSpeed = 90;
+        private int _minSpeed = 65;
 
         private XInputController _controller;
         private int _controllerRefreshRate = 60;
@@ -138,6 +139,8 @@ namespace VisualTankControl
 
             tbTankMaxSpeed.Value = _maxSpeed;
             lblTankMaxSpeedVal.Text = _maxSpeed.ToString();
+            tbTankMinSpeed.Value = _minSpeed;
+            lblTankMinSpeedVal.Text = _minSpeed.ToString();
 
             _controller = new XInputController();
             _controllerTimer = new System.Threading.Timer(obj => manageControllerInput());
@@ -160,6 +163,11 @@ namespace VisualTankControl
                 {
                     _chassis.leftChainForward = true;
                 }
+                _chassis.leftChainSpeed = remap(_chassis.leftChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+                if (_controller.leftThumb.Y == 0)
+                {
+                    _chassis.leftChainSpeed = 0;
+                }
 
                 _chassis.rightChainSpeed = _controller.rightThumb.Y;
                 if (_controller.rightThumb.Y < 0)
@@ -170,6 +178,11 @@ namespace VisualTankControl
                 else
                 {
                     _chassis.rightChainForward = true;
+                }
+                _chassis.rightChainSpeed = remap(_chassis.rightChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+                if (_controller.rightThumb.Y == 0)
+                {
+                    _chassis.rightChainSpeed = 0;
                 }
 
                 sendJson();
@@ -212,6 +225,12 @@ namespace VisualTankControl
             var to = toAbs + toMin;
 
             return (int)to;
+        }
+
+        private void tbTankMinSpeed_Scroll(object sender, EventArgs e)
+        {
+            _minSpeed = tbTankMinSpeed.Value;
+            lblTankMinSpeedVal.Text = _minSpeed.ToString();
         }
     }
 }

@@ -38,9 +38,13 @@
             this.lblTankMaxSpeedVal = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.tbTankMaxSpeed = new System.Windows.Forms.TrackBar();
+            this.lblTankMinSpeedVal = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbTankMinSpeed = new System.Windows.Forms.TrackBar();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbTankMinSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSerialOpen
@@ -97,12 +101,15 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.lblTankMinSpeedVal);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.tbTankMinSpeed);
             this.groupBox2.Controls.Add(this.lblTankMaxSpeedVal);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.tbTankMaxSpeed);
             this.groupBox2.Location = new System.Drawing.Point(12, 71);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(330, 78);
+            this.groupBox2.Size = new System.Drawing.Size(330, 131);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tank";
@@ -136,15 +143,42 @@
             this.tbTankMaxSpeed.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbTankMaxSpeed_KeyDown);
             this.tbTankMaxSpeed.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbTankMaxSpeed_KeyUp);
             // 
-            // frmMain
+            // lblTankMinSpeedVal
+            // 
+            this.lblTankMinSpeedVal.AutoSize = true;
+            this.lblTankMinSpeedVal.Location = new System.Drawing.Point(6, 83);
+            this.lblTankMinSpeedVal.Name = "lblTankMinSpeedVal";
+            this.lblTankMinSpeedVal.Size = new System.Drawing.Size(35, 13);
+            this.lblTankMinSpeedVal.TabIndex = 8;
+            this.lblTankMinSpeedVal.Text = "label2";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 70);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(61, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Min Speed:";
+            // 
+            // tbTankMinSpeed
+            // 
+            this.tbTankMinSpeed.Location = new System.Drawing.Point(76, 70);
+            this.tbTankMinSpeed.Maximum = 100;
+            this.tbTankMinSpeed.Name = "tbTankMinSpeed";
+            this.tbTankMinSpeed.Size = new System.Drawing.Size(244, 45);
+            this.tbTankMinSpeed.TabIndex = 6;
+            this.tbTankMinSpeed.Scroll += new System.EventHandler(this.tbTankMinSpeed_Scroll);
+            // 
+            // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(348, 156);
+            this.ClientSize = new System.Drawing.Size(348, 212);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "frmMain";
+            this.Name = "FrmMain";
             this.Text = "VisualTankControl";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
@@ -154,6 +188,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbTankMinSpeed)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -169,6 +204,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar tbTankMaxSpeed;
         private System.Windows.Forms.Label lblTankMaxSpeedVal;
+        private System.Windows.Forms.Label lblTankMinSpeedVal;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TrackBar tbTankMinSpeed;
     }
 }
 
