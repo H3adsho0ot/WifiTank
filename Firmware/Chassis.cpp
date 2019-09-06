@@ -1,9 +1,15 @@
-#include <Arduino.h>
+#ifndef Chassis_cpp_
+#define Chassis_cpp_
+
+#include "Arduino.h"
 #include "Config.h"
 
 class Chassis
 {
   public:
+  Chassis()
+  {}
+  
   void setup()
   {
     pinMode(ENA, OUTPUT);    
@@ -50,3 +56,5 @@ class Chassis
     analogWrite(ENB, leftChainSpeed);
   }
 };
+
+#endif

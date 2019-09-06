@@ -12,5 +12,5 @@
   const int in4 = 12;   //digitalPin
 
   //Serial
-  const int baudRate = 1000000;
+  const unsigned long baudRate = 1000000;
 #endif

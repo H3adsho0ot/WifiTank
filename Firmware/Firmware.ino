@@ -9,7 +9,7 @@ int LCS = 0;
 int RCS = 0;
 bool LCF = true;
 bool RCF = true;
-Chassis chassis;
+Chassis chassis = Chassis();
   
 void setup()
 {
