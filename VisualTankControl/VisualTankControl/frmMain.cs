@@ -148,26 +148,27 @@ namespace VisualTankControl
             if(_controller.connected)
             {
                 _controller.Update();
-                
 
-                if (_controller.rightTrigger > 0)
+                _chassis.leftChainSpeed = _controller.leftThumb.Y;
+                if (_controller.leftThumb.Y < 0)
                 {
-                    _chassis.leftChainForward = true;
-                    _chassis.rightChainForward = true;
-                    _chassis.leftChainSpeed = remap(_controller.rightTrigger, 0, 255, 0, 100);
-                    _chassis.rightChainSpeed = remap(_controller.rightTrigger, 0, 255, 0, 100);
-                }
-                else if (_controller.leftTrigger > 0)
-                {
+                    _chassis.leftChainSpeed = _chassis.leftChainSpeed * -1;
                     _chassis.leftChainForward = false;
-                    _chassis.rightChainForward = false;
-                    _chassis.leftChainSpeed = remap(_controller.leftTrigger, 0, 255, 0, 100);
-                    _chassis.rightChainSpeed = remap(_controller.leftTrigger, 0, 255, 0, 100);
                 }
                 else
                 {
-                    _chassis.leftChainSpeed = 0;
-                    _chassis.rightChainSpeed = 0;
+                    _chassis.leftChainForward = true;
+                }
+
+                _chassis.rightChainSpeed = _controller.rightThumb.Y;
+                if (_controller.rightThumb.Y < 0)
+                {
+                    _chassis.rightChainSpeed = _chassis.rightChainSpeed * -1;
+                    _chassis.rightChainForward = false;
+                }
+                else
+                {
+                    _chassis.rightChainForward = true;
                 }
 
                 sendJson();
