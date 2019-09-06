@@ -75,6 +75,7 @@ namespace VisualTankControl
             {
                 ASCIIEncoding enc = new ASCIIEncoding();
                 byte[] data = enc.GetBytes(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
+                Debug.WriteLine(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
                 _serialPort.Write(data, 0, data.Length);
             }
         }

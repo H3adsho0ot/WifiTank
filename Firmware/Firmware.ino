@@ -3,7 +3,7 @@
 #include <ArduinoJson.h>
 
 //https://arduinojson.org/v6/assistant/
-StaticJsonDocument<194> jsonObject;
+StaticJsonDocument<48> jsonObject;
 
 int LCS = 0;
 int RCS = 0;

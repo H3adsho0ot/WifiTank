@@ -40,7 +40,7 @@ class Chassis
   {
     //set directions
     //right chain
-    if(leftChainForward)
+    if(rightChainForward)
     {
       digitalWrite(_in1, HIGH);
       digitalWrite(_in2, LOW);
@@ -52,7 +52,7 @@ class Chassis
     }
   
     //left chain
-    if(rightChainForward)
+    if(leftChainForward)
     {
       digitalWrite(_in3, LOW);
       digitalWrite(_in4, HIGH);
