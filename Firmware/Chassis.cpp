@@ -13,6 +13,7 @@ class Chassis
     const int LEDC_CHANNEL_3 = 3;
 
     const int LEDC_TIMER_8_BIT = 8;
+    const int LEDC_BASE_FREQ = 490;
     
   public:
     Chassis()
