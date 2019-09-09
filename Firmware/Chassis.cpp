@@ -13,7 +13,6 @@ class Chassis
     const int LEDC_CHANNEL_3 = 3;
 
     const int LEDC_TIMER_8_BIT = 8;
-    const int LEDC_BASE_FREQ = 30000;
     
   public:
     Chassis()
@@ -65,24 +64,24 @@ class Chassis
       if(rightChainForward)
       {
         ledcWrite(LEDC_CHANNEL_0, rightChainSpeed);
-        digitalWrite(in2, LOW);
+        ledcWrite(LEDC_CHANNEL_1, 0);
       }
       else
       {
-        digitalWrite(in1, LOW);
+        ledcWrite(LEDC_CHANNEL_0, 0);
         ledcWrite(LEDC_CHANNEL_1, rightChainSpeed);
       }
     
       //left chain
       if(leftChainForward)
       {
-        digitalWrite(in3, LOW);
+        ledcWrite(LEDC_CHANNEL_2, 0);
         ledcWrite(LEDC_CHANNEL_3, leftChainSpeed);
       }
       else
       {
         ledcWrite(LEDC_CHANNEL_2, leftChainSpeed);
-        digitalWrite(in4, LOW);
+        ledcWrite(LEDC_CHANNEL_3, 0);
       }
     }
 };
