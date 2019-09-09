@@ -14,15 +14,15 @@
 
   //drv8833
   //chain right
-  const int ENA;
-  const int ENB;
+  //const int ENA = 0;
+  //const int ENB = 0;
   
-  const int in1 = 5;    //digitalPin + PWM 
-  const int in2 = 6;   //digitalPin + PWM 
+  const int in1 = 12;   //digitalPin + PWM 
+  const int in2 = 13;   //digitalPin + PWM 
   
   //chain left
-  const int in3 = 9;   //digitalPin + PWM 
-  const int in4 = 11;   //digitalPin + PWM 
+  const int in3 = 15;   //digitalPin + PWM 
+  const int in4 = 14;   //digitalPin + PWM 
   
   //Serial
   const unsigned long baudRate = 1000000;

@@ -3,13 +3,13 @@
 #include <ArduinoJson.h>
 
 //https://arduinojson.org/v6/assistant/
-StaticJsonDocument<48> jsonObject;
+StaticJsonDocument<80> jsonObject;
 
 int LCS = 0;
 int RCS = 0;
 bool LCF = true;
 bool RCF = true;
-Chassis chassis = Chassis(ENA, in1, in2, in3, in4, ENB);
+Chassis chassis = Chassis();
   
 void setup()
 {
