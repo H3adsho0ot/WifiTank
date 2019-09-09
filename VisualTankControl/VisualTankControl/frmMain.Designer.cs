@@ -35,16 +35,21 @@
             this.cmbSerial = new System.Windows.Forms.ComboBox();
             this.btnSerialClose = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.lblTankMaxSpeedVal = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbTankMaxSpeed = new System.Windows.Forms.TrackBar();
             this.lblTankMinSpeedVal = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tbTankMinSpeed = new System.Windows.Forms.TrackBar();
+            this.lblTankMaxSpeedVal = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tbTankMaxSpeed = new System.Windows.Forms.TrackBar();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.websocketDiconnect = new System.Windows.Forms.Button();
+            this.websocketConnect = new System.Windows.Forms.Button();
+            this.txtWebsocket = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMinSpeed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnSerialOpen
@@ -107,12 +112,39 @@
             this.groupBox2.Controls.Add(this.lblTankMaxSpeedVal);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.tbTankMaxSpeed);
-            this.groupBox2.Location = new System.Drawing.Point(12, 71);
+            this.groupBox2.Location = new System.Drawing.Point(12, 130);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(330, 131);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Tank";
+            // 
+            // lblTankMinSpeedVal
+            // 
+            this.lblTankMinSpeedVal.AutoSize = true;
+            this.lblTankMinSpeedVal.Location = new System.Drawing.Point(6, 83);
+            this.lblTankMinSpeedVal.Name = "lblTankMinSpeedVal";
+            this.lblTankMinSpeedVal.Size = new System.Drawing.Size(35, 13);
+            this.lblTankMinSpeedVal.TabIndex = 8;
+            this.lblTankMinSpeedVal.Text = "label2";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 70);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(61, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Min Speed:";
+            // 
+            // tbTankMinSpeed
+            // 
+            this.tbTankMinSpeed.Location = new System.Drawing.Point(76, 70);
+            this.tbTankMinSpeed.Maximum = 100;
+            this.tbTankMinSpeed.Name = "tbTankMinSpeed";
+            this.tbTankMinSpeed.Size = new System.Drawing.Size(244, 45);
+            this.tbTankMinSpeed.TabIndex = 6;
+            this.tbTankMinSpeed.Scroll += new System.EventHandler(this.tbTankMinSpeed_Scroll);
             // 
             // lblTankMaxSpeedVal
             // 
@@ -143,38 +175,52 @@
             this.tbTankMaxSpeed.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbTankMaxSpeed_KeyDown);
             this.tbTankMaxSpeed.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbTankMaxSpeed_KeyUp);
             // 
-            // lblTankMinSpeedVal
+            // groupBox3
             // 
-            this.lblTankMinSpeedVal.AutoSize = true;
-            this.lblTankMinSpeedVal.Location = new System.Drawing.Point(6, 83);
-            this.lblTankMinSpeedVal.Name = "lblTankMinSpeedVal";
-            this.lblTankMinSpeedVal.Size = new System.Drawing.Size(35, 13);
-            this.lblTankMinSpeedVal.TabIndex = 8;
-            this.lblTankMinSpeedVal.Text = "label2";
+            this.groupBox3.Controls.Add(this.txtWebsocket);
+            this.groupBox3.Controls.Add(this.websocketDiconnect);
+            this.groupBox3.Controls.Add(this.websocketConnect);
+            this.groupBox3.Location = new System.Drawing.Point(12, 71);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(330, 53);
+            this.groupBox3.TabIndex = 4;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "WebSocket";
             // 
-            // label3
+            // websocketDiconnect
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 70);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(61, 13);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "Min Speed:";
+            this.websocketDiconnect.Enabled = false;
+            this.websocketDiconnect.Location = new System.Drawing.Point(245, 18);
+            this.websocketDiconnect.Name = "websocketDiconnect";
+            this.websocketDiconnect.Size = new System.Drawing.Size(75, 22);
+            this.websocketDiconnect.TabIndex = 1;
+            this.websocketDiconnect.Text = "Disconnect";
+            this.websocketDiconnect.UseVisualStyleBackColor = true;
+            this.websocketDiconnect.Click += new System.EventHandler(this.websocketDiconnect_Click);
             // 
-            // tbTankMinSpeed
+            // websocketConnect
             // 
-            this.tbTankMinSpeed.Location = new System.Drawing.Point(76, 70);
-            this.tbTankMinSpeed.Maximum = 100;
-            this.tbTankMinSpeed.Name = "tbTankMinSpeed";
-            this.tbTankMinSpeed.Size = new System.Drawing.Size(244, 45);
-            this.tbTankMinSpeed.TabIndex = 6;
-            this.tbTankMinSpeed.Scroll += new System.EventHandler(this.tbTankMinSpeed_Scroll);
+            this.websocketConnect.Location = new System.Drawing.Point(164, 18);
+            this.websocketConnect.Name = "websocketConnect";
+            this.websocketConnect.Size = new System.Drawing.Size(75, 22);
+            this.websocketConnect.TabIndex = 0;
+            this.websocketConnect.Text = "Connect";
+            this.websocketConnect.UseVisualStyleBackColor = true;
+            this.websocketConnect.Click += new System.EventHandler(this.websocketConnect_Click);
+            // 
+            // txtWebsocket
+            // 
+            this.txtWebsocket.Location = new System.Drawing.Point(9, 20);
+            this.txtWebsocket.Name = "txtWebsocket";
+            this.txtWebsocket.Size = new System.Drawing.Size(146, 20);
+            this.txtWebsocket.TabIndex = 2;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(348, 212);
+            this.ClientSize = new System.Drawing.Size(348, 267);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -187,8 +233,10 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMinSpeed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -207,6 +255,10 @@
         private System.Windows.Forms.Label lblTankMinSpeedVal;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar tbTankMinSpeed;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.TextBox txtWebsocket;
+        private System.Windows.Forms.Button websocketDiconnect;
+        private System.Windows.Forms.Button websocketConnect;
     }
 }
 

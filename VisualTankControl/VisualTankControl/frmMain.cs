@@ -11,12 +11,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
+using WebSocketSharp;
 
 namespace VisualTankControl
 {
     public partial class FrmMain : Form
     {
         private SerialPort _serialPort;
+        private WebSocket _webSocket = null;
         private Chassis _chassis;
 
         private int _maxSpeed = 90;
@@ -72,12 +74,19 @@ namespace VisualTankControl
 
         private void sendJson()
         {
+            ASCIIEncoding enc = new ASCIIEncoding();
+            string jsonObject = JsonConvert.SerializeObject(_chassis);
+            
+            Debug.WriteLine(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
+
             if (_serialPort.IsOpen)
             {
-                ASCIIEncoding enc = new ASCIIEncoding();
-                byte[] data = enc.GetBytes(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
-                Debug.WriteLine(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
+                byte[] data = enc.GetBytes(jsonObject + Environment.NewLine);
                 _serialPort.Write(data, 0, data.Length);
+            }
+            else if(_webSocket != null && _webSocket.IsAlive)
+            {
+                _webSocket.Send(jsonObject);
             }
         }
 
@@ -145,6 +154,8 @@ namespace VisualTankControl
             _controller = new XInputController();
             _controllerTimer = new System.Threading.Timer(obj => manageControllerInput());
             _controllerTimer.Change(0, 1000 / _controllerRefreshRate);
+
+            txtWebsocket.Text = "192.168.178.56:80";
         }
 
         private void manageControllerInput()
@@ -231,6 +242,17 @@ namespace VisualTankControl
         {
             _minSpeed = tbTankMinSpeed.Value;
             lblTankMinSpeedVal.Text = _minSpeed.ToString();
+        }
+
+        private void websocketConnect_Click(object sender, EventArgs e)
+        {
+            _webSocket = new WebSocket("ws://" + txtWebsocket.Text);
+            _webSocket.Connect();
+        }
+
+        private void websocketDiconnect_Click(object sender, EventArgs e)
+        {
+            _webSocket.Close();
         }
     }
 }
