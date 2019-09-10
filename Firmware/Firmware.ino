@@ -1,5 +1,7 @@
 #include "Config.h"
+#include "Wifi_Secret.h"
 #include "Chassis.cpp"
+
 #include <ArduinoJson.h>
 #include <WiFi.h>
 #include <WebSocketsServer.h>
@@ -7,15 +9,13 @@
 //https://arduinojson.org/v6/assistant/
 StaticJsonDocument<80> jsonObject;
 
-const char* ssid = "FRITZ!Box 7590 AuN";
-const char* password = "pwd";
 WebSocketsServer webSocket = WebSocketsServer(80);
+Chassis chassis = Chassis();
 
 int LCS = 0;
 int RCS = 0;
 bool LCF = true;
 bool RCF = true;
-Chassis chassis = Chassis();
   
 void setup()
 {

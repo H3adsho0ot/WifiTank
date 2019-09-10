@@ -1,5 +1,5 @@
-#ifndef Chassis_cpp_
-#define Chassis_cpp_
+#ifndef Chassis_cpp
+#define Chassis_cpp
 
 #include "Arduino.h"
 #include "Config.h"

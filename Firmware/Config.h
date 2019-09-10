@@ -12,7 +12,4 @@
   
   //Serial
   const unsigned long baudRate = 1000000;
-
-  //Wifi
-
 #endif
