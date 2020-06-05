@@ -18,4 +18,4 @@ FTDI
 5V		5V
 GND		GND
 TX		V0R
-RX		V0T	
+RX		V0T 	
