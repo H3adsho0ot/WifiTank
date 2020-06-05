@@ -87,7 +87,7 @@ namespace VisualTankControl
 
             if (jsonObject != _lastJson)
             {
-                Debug.WriteLine(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
+                //Debug.WriteLine(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
 
                 if (_serialPort.IsOpen)
                 {
@@ -403,6 +403,12 @@ namespace VisualTankControl
         {
             _webSocket = new WebSocket("ws://" + txtWebsocket.Text);
             _webSocket.Connect();
+            _webSocket.OnMessage += new EventHandler<MessageEventArgs>(webSocketOnMessage);
+        }
+
+        private void webSocketOnMessage(object test, MessageEventArgs args)
+        {
+            Console.WriteLine(args.Data);
         }
 
         private void websocketDiconnect_Click(object sender, EventArgs e)

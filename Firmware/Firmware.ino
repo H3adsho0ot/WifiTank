@@ -60,7 +60,7 @@ void onWebSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t leng
     case WStype_TEXT:
        deserializeJSON((const char*)payload);
       //Serial.printf("[%u] Text: %s\n", num, payload);
-      //webSocket.sendTXT(num, payload);
+      webSocket.sendTXT(num, payload);
       break;
  
     // For everything else: do nothing
