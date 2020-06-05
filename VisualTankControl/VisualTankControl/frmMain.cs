@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using WebSocketSharp;
+using SharpDX.DirectInput;
 
 namespace VisualTankControl
 {
@@ -27,6 +28,9 @@ namespace VisualTankControl
         private XInputController _controller;
         private int _controllerRefreshRate = 60;
         private System.Threading.Timer _controllerTimer;
+
+        private int GamepadY = 0;
+        private int GamepadRotationZ = 0;
 
         public FrmMain()
         {
@@ -76,7 +80,7 @@ namespace VisualTankControl
         {
             ASCIIEncoding enc = new ASCIIEncoding();
             string jsonObject = JsonConvert.SerializeObject(_chassis);
-            
+
             Debug.WriteLine(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
 
             if (_serialPort.IsOpen)
@@ -84,7 +88,7 @@ namespace VisualTankControl
                 byte[] data = enc.GetBytes(jsonObject + Environment.NewLine);
                 _serialPort.Write(data, 0, data.Length);
             }
-            else if(_webSocket != null && _webSocket.IsAlive)
+            else if (_webSocket != null && _webSocket.IsAlive)
             {
                 _webSocket.Send(jsonObject);
             }
@@ -151,54 +155,121 @@ namespace VisualTankControl
             tbTankMinSpeed.Value = _minSpeed;
             lblTankMinSpeedVal.Text = _minSpeed.ToString();
 
-            _controller = new XInputController();
-            _controllerTimer = new System.Threading.Timer(obj => manageControllerInput());
-            _controllerTimer.Change(0, 1000 / _controllerRefreshRate);
+            //_controller = new XInputController();
+            //_controllerTimer = new System.Threading.Timer(obj => manageControllerInput());
+            //_controllerTimer.Change(0, 1000 / _controllerRefreshRate);
+
+            // Find a Joystick Guid
+            var joystickGuid = Guid.Empty;
+            DirectInput directInput = new DirectInput();
+            foreach (var deviceInstance in directInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AllDevices))
+            {
+                joystickGuid = deviceInstance.InstanceGuid;
+            }
+            if (joystickGuid != Guid.Empty)
+            {
+                Gamepad gamepad = new Gamepad(joystickGuid);
+                gamepad.RaiseGamepadInput += new Gamepad.GamepadInput(OnGamepadInput);
+                gamepad.StartPoll();
+            }
 
             txtWebsocket.Text = "192.168.178.56:80";
         }
 
-        private void manageControllerInput()
+        private void OnGamepadInput(JoystickUpdate update)
         {
-            if(_controller.connected)
+            if (update.Offset == JoystickOffset.Y)
             {
-                _controller.Update();
-
-                _chassis.leftChainSpeed = _controller.leftThumb.Y;
-                if (_controller.leftThumb.Y < 0)
-                {
-                    _chassis.leftChainSpeed = _chassis.leftChainSpeed * -1;
-                    _chassis.leftChainForward = false;
-                }
-                else
-                {
-                    _chassis.leftChainForward = true;
-                }
-                _chassis.leftChainSpeed = remap(_chassis.leftChainSpeed, 0, 100, _minSpeed, _maxSpeed);
-                if (_controller.leftThumb.Y == 0)
-                {
-                    _chassis.leftChainSpeed = 0;
-                }
-
-                _chassis.rightChainSpeed = _controller.rightThumb.Y;
-                if (_controller.rightThumb.Y < 0)
-                {
-                    _chassis.rightChainSpeed = _chassis.rightChainSpeed * -1;
-                    _chassis.rightChainForward = false;
-                }
-                else
-                {
-                    _chassis.rightChainForward = true;
-                }
-                _chassis.rightChainSpeed = remap(_chassis.rightChainSpeed, 0, 100, _minSpeed, _maxSpeed);
-                if (_controller.rightThumb.Y == 0)
-                {
-                    _chassis.rightChainSpeed = 0;
-                }
-
-                sendJson();
+                GamepadY = update.Value;
+                //Console.WriteLine(GamepadY);
+                manageControllerInput(GamepadY, GamepadRotationZ);
+            }
+            if (update.Offset == JoystickOffset.RotationZ)
+            {
+                GamepadRotationZ = update.Value;
+                //Console.WriteLine(GamepadZ);
+                manageControllerInput(GamepadY, GamepadRotationZ);
             }
         }
+
+        private void manageControllerInput(int y, int z)
+        {
+            _chassis.leftChainSpeed = y;
+            if (y < 0)
+            {
+                _chassis.leftChainSpeed = _chassis.leftChainSpeed * -1;
+                _chassis.leftChainForward = false;
+            }
+            else
+            {
+                _chassis.leftChainForward = true;
+            }
+            _chassis.leftChainSpeed = remap(_chassis.leftChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+            if (y == 0)
+            {
+                _chassis.leftChainSpeed = 0;
+            }
+
+            _chassis.rightChainSpeed = z;
+            if (z < 0)
+            {
+                _chassis.rightChainSpeed = _chassis.rightChainSpeed * -1;
+                _chassis.rightChainForward = false;
+            }
+            else
+            {
+                _chassis.rightChainForward = true;
+            }
+            _chassis.rightChainSpeed = remap(_chassis.rightChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+            if (z == 0)
+            {
+                _chassis.rightChainSpeed = 0;
+            }
+
+            sendJson();
+        }
+
+        //private void manageControllerInput()
+        //{
+        //    if(_controller.connected)
+        //    {
+        //        _controller.Update();
+
+        //        _chassis.leftChainSpeed = _controller.leftThumb.Y;
+        //        if (_controller.leftThumb.Y < 0)
+        //        {
+        //            _chassis.leftChainSpeed = _chassis.leftChainSpeed * -1;
+        //            _chassis.leftChainForward = false;
+        //        }
+        //        else
+        //        {
+        //            _chassis.leftChainForward = true;
+        //        }
+        //        _chassis.leftChainSpeed = remap(_chassis.leftChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+        //        if (_controller.leftThumb.Y == 0)
+        //        {
+        //            _chassis.leftChainSpeed = 0;
+        //        }
+
+        //        _chassis.rightChainSpeed = _controller.rightThumb.Y;
+        //        if (_controller.rightThumb.Y < 0)
+        //        {
+        //            _chassis.rightChainSpeed = _chassis.rightChainSpeed * -1;
+        //            _chassis.rightChainForward = false;
+        //        }
+        //        else
+        //        {
+        //            _chassis.rightChainForward = true;
+        //        }
+        //        _chassis.rightChainSpeed = remap(_chassis.rightChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+        //        if (_controller.rightThumb.Y == 0)
+        //        {
+        //            _chassis.rightChainSpeed = 0;
+        //        }
+
+        //        sendJson();
+        //    }
+        //}
 
         private void tbTankMaxSpeed_Scroll(object sender, EventArgs e)
         {

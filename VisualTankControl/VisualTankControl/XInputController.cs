@@ -11,7 +11,7 @@ namespace VisualTankControl
     public class XInputController
     {
         Controller controller;
-        Gamepad gamepad;
+        SharpDX.XInput.Gamepad gamepad;
         public bool connected = false;
         public int deadband = 2500;
         public Point leftThumb, rightThumb = new Point(0, 0);
