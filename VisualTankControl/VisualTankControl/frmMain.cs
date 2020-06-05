@@ -22,15 +22,19 @@ namespace VisualTankControl
         private WebSocket _webSocket = null;
         private Chassis _chassis;
 
-        private int _maxSpeed = 90;
-        private int _minSpeed = 65;
+        private int _maxSpeed = 70;
+        private int _minSpeed = 30;
 
-        private XInputController _controller;
-        private int _controllerRefreshRate = 60;
-        private System.Threading.Timer _controllerTimer;
+        //private XInputController _controller;
+        //private int _controllerRefreshRate = 60;
+        //private System.Threading.Timer _controllerTimer;
 
-        private int GamepadY = 0;
-        private int GamepadRotationZ = 0;
+        private int _gamepadY = 0;
+        private int _gamepadRotationZ = 0;
+        private int _gamepadZ = 0;
+        private int _gamepadX = 0;
+
+        private string _lastJson = string.Empty;
 
         public FrmMain()
         {
@@ -81,17 +85,22 @@ namespace VisualTankControl
             ASCIIEncoding enc = new ASCIIEncoding();
             string jsonObject = JsonConvert.SerializeObject(_chassis);
 
-            Debug.WriteLine(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
+            if (jsonObject != _lastJson)
+            {
+                Debug.WriteLine(JsonConvert.SerializeObject(_chassis) + Environment.NewLine);
 
-            if (_serialPort.IsOpen)
-            {
-                byte[] data = enc.GetBytes(jsonObject + Environment.NewLine);
-                _serialPort.Write(data, 0, data.Length);
+                if (_serialPort.IsOpen)
+                {
+                    byte[] data = enc.GetBytes(jsonObject + Environment.NewLine);
+                    _serialPort.Write(data, 0, data.Length);
+                }
+                else if (_webSocket != null && _webSocket.IsAlive)
+                {
+                    _webSocket.Send(jsonObject);
+                }
             }
-            else if (_webSocket != null && _webSocket.IsAlive)
-            {
-                _webSocket.Send(jsonObject);
-            }
+
+            _lastJson = jsonObject;
         }
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
@@ -180,51 +189,126 @@ namespace VisualTankControl
         {
             if (update.Offset == JoystickOffset.Y)
             {
-                GamepadY = update.Value;
-                //Console.WriteLine(GamepadY);
-                manageControllerInput(GamepadY, GamepadRotationZ);
+                _gamepadY = update.Value;
+                manageControllerInput();
             }
             if (update.Offset == JoystickOffset.RotationZ)
             {
-                GamepadRotationZ = update.Value;
-                //Console.WriteLine(GamepadZ);
-                manageControllerInput(GamepadY, GamepadRotationZ);
+                _gamepadRotationZ = update.Value;
+                manageControllerInput();
+            }
+            if (update.Offset == JoystickOffset.Z)
+            {
+                _gamepadZ = update.Value;
+                manageControllerInput();
+            }
+            if (update.Offset == JoystickOffset.X)
+            {
+                _gamepadX = update.Value;
+                manageControllerInput();
             }
         }
 
-        private void manageControllerInput(int y, int z)
+        private void manageControllerInput()
         {
-            _chassis.leftChainSpeed = y;
-            if (y < 0)
+            _chassis.rightChainSpeed = _gamepadY;
+            _chassis.leftChainSpeed = _gamepadY;
+            if (_gamepadY < 0)
             {
                 _chassis.leftChainSpeed = _chassis.leftChainSpeed * -1;
                 _chassis.leftChainForward = false;
-            }
-            else
-            {
-                _chassis.leftChainForward = true;
-            }
-            _chassis.leftChainSpeed = remap(_chassis.leftChainSpeed, 0, 100, _minSpeed, _maxSpeed);
-            if (y == 0)
-            {
-                _chassis.leftChainSpeed = 0;
-            }
-
-            _chassis.rightChainSpeed = z;
-            if (z < 0)
-            {
                 _chassis.rightChainSpeed = _chassis.rightChainSpeed * -1;
                 _chassis.rightChainForward = false;
             }
             else
             {
+                _chassis.leftChainForward = true;
                 _chassis.rightChainForward = true;
             }
-            _chassis.rightChainSpeed = remap(_chassis.rightChainSpeed, 0, 100, _minSpeed, _maxSpeed);
-            if (z == 0)
+
+            if (_gamepadZ > 0)
+            {
+                _chassis.leftChainSpeed = _chassis.leftChainSpeed * (100 - _gamepadZ) / 100;
+                _chassis.rightChainSpeed = _chassis.rightChainSpeed * (100 + _gamepadZ) / 100;
+            }
+            else
+            {
+                _chassis.rightChainSpeed = _chassis.rightChainSpeed * (100 - _gamepadZ * - 1) / 100;
+                _chassis.leftChainSpeed = _chassis.leftChainSpeed * (100 + _gamepadZ * -1) / 100;
+            }
+
+            if(_chassis.leftChainSpeed > 100)
+            {
+                _chassis.leftChainSpeed = 100;
+            }
+            else if (_chassis.leftChainSpeed < 0)
+            {
+                _chassis.leftChainSpeed = 0;
+            }
+
+            if (_chassis.rightChainSpeed > 100)
+            {
+                _chassis.rightChainSpeed = 100;
+            }
+            else if (_chassis.rightChainSpeed < 0)
             {
                 _chassis.rightChainSpeed = 0;
             }
+
+            if (_chassis.leftChainSpeed > 0)
+            {
+                _chassis.leftChainSpeed = remap(_chassis.leftChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+            }
+            else
+            {
+                _chassis.leftChainSpeed = 0;
+            }
+
+            if (_chassis.rightChainSpeed > 0)
+            {
+                _chassis.rightChainSpeed = remap(_chassis.rightChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+            }
+            else
+            {
+                _chassis.rightChainSpeed = 0;
+            }
+
+            //if (_gamepadY == 0)
+            //{
+            //    _chassis.leftChainSpeed = 0;
+            //}
+
+            //_chassis.leftChainSpeed = _gamepadY;
+            //if (_gamepadY < 0)
+            //{
+            //    _chassis.leftChainSpeed = _chassis.leftChainSpeed * -1;
+            //    _chassis.leftChainForward = false;
+            //}
+            //else
+            //{
+            //    _chassis.leftChainForward = true;
+            //}
+            //_chassis.leftChainSpeed = remap(_chassis.leftChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+            //if (_gamepadY == 0)
+            //{
+            //    _chassis.leftChainSpeed = 0;
+            //}
+
+            //_chassis.rightChainSpeed = _gamepadRotationZ;
+            //if (_gamepadRotationZ < 0)
+            //{
+            //    _chassis.rightChainSpeed = _chassis.rightChainSpeed * -1;
+            //    _chassis.rightChainForward = false;
+            //}
+            //else
+            //{
+            //    _chassis.rightChainForward = true;
+            //}
+            //_chassis.rightChainSpeed = remap(_chassis.rightChainSpeed, 0, 100, _minSpeed, _maxSpeed);
+            //if (_gamepadRotationZ == 0)
+            //{
+            //    _chassis.rightChainSpeed = 0;
+            //}
 
             sendJson();
         }
