@@ -13,6 +13,8 @@ using System.Threading;
 using System.Diagnostics;
 using WebSocketSharp;
 using SharpDX.DirectInput;
+using System.IO;
+using System.Reflection;
 
 namespace VisualTankControl
 {
@@ -182,7 +184,7 @@ namespace VisualTankControl
                 gamepad.StartPoll();
             }
 
-            txtWebsocket.Text = "192.168.178.56:80";
+            txtWebsocket.Text = "192.168.178.56:8080";
         }
 
         private void OnGamepadInput(JoystickUpdate update)
@@ -233,11 +235,11 @@ namespace VisualTankControl
             }
             else
             {
-                _chassis.rightChainSpeed = _chassis.rightChainSpeed * (100 - _gamepadZ * - 1) / 100;
+                _chassis.rightChainSpeed = _chassis.rightChainSpeed * (100 - _gamepadZ * -1) / 100;
                 _chassis.leftChainSpeed = _chassis.leftChainSpeed * (100 + _gamepadZ * -1) / 100;
             }
 
-            if(_chassis.leftChainSpeed > 100)
+            if (_chassis.leftChainSpeed > 100)
             {
                 _chassis.leftChainSpeed = 100;
             }
@@ -406,14 +408,70 @@ namespace VisualTankControl
             _webSocket.OnMessage += new EventHandler<MessageEventArgs>(webSocketOnMessage);
         }
 
+        private int counter = 0;
         private void webSocketOnMessage(object test, MessageEventArgs args)
         {
-            Console.WriteLine(args.Data);
+            byte[] newByte = ToByteArray(args.Data);
+            MemoryStream memStream = new MemoryStream(newByte);
+
+            //// Save the memorystream to file
+            ///
+            Image image = Bitmap.FromStream(memStream);
+
+            SetControlPropertyThreadSafe(pictureBox1, "Width", image.Width);
+            SetControlPropertyThreadSafe(pictureBox1, "Height", image.Height);
+            //pictureBox1.Width = image.Width;
+            //pictureBox1.Height = image.Height;
+            pictureBox1.Image = image;
+            //Bitmap.FromStream(memStream).Save(@"C:\temp\img\img" + counter.ToString() + ".jpg");
+            counter = counter + 1;
+            //Console.WriteLine(args.Data.GetType());
+        }
+
+        public static byte[] ToByteArray(String HexString)
+        {
+            HexString = HexString.Replace("-", "");
+            int NumberChars = HexString.Length;
+
+            byte[] bytes = new byte[NumberChars / 2];
+
+            for (int i = 0; i < NumberChars; i += 2)
+            {
+                bytes[i / 2] = Convert.ToByte(HexString.Substring(i, 2), 16);
+            }
+            return bytes;
         }
 
         private void websocketDiconnect_Click(object sender, EventArgs e)
         {
             _webSocket.Close();
+        }
+
+        private delegate void SetControlPropertyThreadSafeDelegate(
+    Control control,
+    string propertyName,
+    object propertyValue);
+
+        public static void SetControlPropertyThreadSafe(
+            Control control,
+            string propertyName,
+            object propertyValue)
+        {
+            if (control.InvokeRequired)
+            {
+                control.Invoke(new SetControlPropertyThreadSafeDelegate
+                (SetControlPropertyThreadSafe),
+                new object[] { control, propertyName, propertyValue });
+            }
+            else
+            {
+                control.GetType().InvokeMember(
+                    propertyName,
+                    BindingFlags.SetProperty,
+                    null,
+                    control,
+                    new object[] { propertyValue });
+            }
         }
     }
 }

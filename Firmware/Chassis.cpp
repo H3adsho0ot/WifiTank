@@ -6,11 +6,11 @@
 
 class Chassis
 {
-  private:
-    const int LEDC_CHANNEL_0 = 0;
+  private:    
     const int LEDC_CHANNEL_1 = 1;
     const int LEDC_CHANNEL_2 = 2;
     const int LEDC_CHANNEL_3 = 3;
+    const int LEDC_CHANNEL_4 = 4;
 
     const int LEDC_TIMER_8_BIT = 8;
     const int LEDC_BASE_FREQ = 490;
@@ -26,14 +26,14 @@ class Chassis
       pinMode(in3, OUTPUT);
       pinMode(in4, OUTPUT);
       
-      ledcSetup(LEDC_CHANNEL_0, LEDC_BASE_FREQ, LEDC_TIMER_8_BIT);
-      ledcAttachPin(in1, LEDC_CHANNEL_0);
       ledcSetup(LEDC_CHANNEL_1, LEDC_BASE_FREQ, LEDC_TIMER_8_BIT);
       ledcAttachPin(in2, LEDC_CHANNEL_1);
       ledcSetup(LEDC_CHANNEL_2, LEDC_BASE_FREQ, LEDC_TIMER_8_BIT);
       ledcAttachPin(in3, LEDC_CHANNEL_2);
       ledcSetup(LEDC_CHANNEL_3, LEDC_BASE_FREQ, LEDC_TIMER_8_BIT);
       ledcAttachPin(in4, LEDC_CHANNEL_3);
+      ledcSetup(LEDC_CHANNEL_4, LEDC_BASE_FREQ, LEDC_TIMER_8_BIT);
+      ledcAttachPin(in1, LEDC_CHANNEL_4);
     }
   
     void drive(int leftChainSpeed, bool leftChainForward, int rightChainSpeed, bool rightChainForward)
@@ -64,12 +64,12 @@ class Chassis
       //right chain
       if(rightChainForward)
       {
-        ledcWrite(LEDC_CHANNEL_0, rightChainSpeed);
+        ledcWrite(LEDC_CHANNEL_4, rightChainSpeed);
         ledcWrite(LEDC_CHANNEL_1, 0);
       }
       else
       {
-        ledcWrite(LEDC_CHANNEL_0, 0);
+        ledcWrite(LEDC_CHANNEL_4, 0);
         ledcWrite(LEDC_CHANNEL_1, rightChainSpeed);
       }
     

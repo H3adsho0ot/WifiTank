@@ -11,5 +11,5 @@
   const int in4 = 13;  
   
   //Serial
-  const unsigned long baudRate = 1000000;
+  const unsigned long baudRate = 115200;
 #endif

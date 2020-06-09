@@ -42,14 +42,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbTankMaxSpeed = new System.Windows.Forms.TrackBar();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtWebsocket = new System.Windows.Forms.TextBox();
             this.websocketDiconnect = new System.Windows.Forms.Button();
             this.websocketConnect = new System.Windows.Forms.Button();
-            this.txtWebsocket = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMinSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).BeginInit();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSerialOpen
@@ -187,6 +189,13 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "WebSocket";
             // 
+            // txtWebsocket
+            // 
+            this.txtWebsocket.Location = new System.Drawing.Point(9, 20);
+            this.txtWebsocket.Name = "txtWebsocket";
+            this.txtWebsocket.Size = new System.Drawing.Size(146, 20);
+            this.txtWebsocket.TabIndex = 2;
+            // 
             // websocketDiconnect
             // 
             this.websocketDiconnect.Enabled = false;
@@ -208,18 +217,20 @@
             this.websocketConnect.UseVisualStyleBackColor = true;
             this.websocketConnect.Click += new System.EventHandler(this.websocketConnect_Click);
             // 
-            // txtWebsocket
+            // pictureBox1
             // 
-            this.txtWebsocket.Location = new System.Drawing.Point(9, 20);
-            this.txtWebsocket.Name = "txtWebsocket";
-            this.txtWebsocket.Size = new System.Drawing.Size(146, 20);
-            this.txtWebsocket.TabIndex = 2;
+            this.pictureBox1.Location = new System.Drawing.Point(13, 268);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(329, 237);
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(348, 267);
+            this.ClientSize = new System.Drawing.Size(355, 519);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -237,6 +248,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -259,6 +271,7 @@
         private System.Windows.Forms.TextBox txtWebsocket;
         private System.Windows.Forms.Button websocketDiconnect;
         private System.Windows.Forms.Button websocketConnect;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
