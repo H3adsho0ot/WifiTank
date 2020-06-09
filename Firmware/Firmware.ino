@@ -96,8 +96,9 @@ void onWebSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t leng
     // Client has disconnected
     case WStype_DISCONNECTED:
       Serial.printf("[%u] Disconnected!\n", num);
+      LCS = 0;
+      RCS = 0;
       break;
-
     // New client has connected
     case WStype_CONNECTED:
       {
@@ -106,14 +107,9 @@ void onWebSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t leng
         Serial.println(ip.toString());
       }
       break;
-
-    // Echo text message back to client
     case WStype_TEXT:
       deserializeJSON((const char*)payload);
-      //Serial.printf("[%u] Text: %s\n", num, payload);
-      //webSocket.sendTXT(num, payload);
       break;
-
     // For everything else: do nothing
     case WStype_BIN:
     case WStype_ERROR:
@@ -133,10 +129,8 @@ void deserializeJSON(String inputString)
 
   inputString.toCharArray(input, inputStringLen);
 
-  // Deserialize JSON
   DeserializationError error = deserializeJson(jsonObject, input);
 
-  // Test if parsing succeeds.
   if (!error)
   {
     LCS = (int)jsonObject["LCS"];
@@ -146,24 +140,43 @@ void deserializeJSON(String inputString)
   }
   else
   {
+    LCS = 0;
+    RCS = 0;
     //Serial.println("JSON deserializion error");
   }
 }
 
 void loop()
 {
-  //Check if serial available
-  if (Serial.available() > 0)
+  if (WiFi.status() == WL_CONNECTED)
   {
-    deserializeJSON(Serial.readStringUntil('\n'));
+    //Check if serial available
+    if (Serial.available() > 0)
+    {
+      deserializeJSON(Serial.readStringUntil('\n'));
+    }
+
+    // Look for and handle WebSocket data
+    webSocket.loop();
+
+    chassis.drive(LCS, LCF, RCS, RCF);
+
+    camera_fb_t *fb = esp_camera_fb_get();
+
+    if (!fb)
+    {
+      Serial.println("Camera capture failed");
+      esp_camera_fb_return(fb);
+      return;
+    }
+
+    if (fb->format != PIXFORMAT_JPEG)
+    {
+      Serial.println("Non-JPEG data not implemented");
+      return;
+    }
+
+    webSocket.broadcastBIN((const uint8_t*) fb->buf, fb->len);
+    esp_camera_fb_return(fb);
   }
-
-  // Look for and handle WebSocket data
-  webSocket.loop();
-  
-  chassis.drive(LCS, LCF, RCS, RCF);
-
-  camera_fb_t *fb = esp_camera_fb_get();
-  webSocket.broadcastBIN((const uint8_t*) fb->buf, fb->len);
-  esp_camera_fb_return(fb);
 }
