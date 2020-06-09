@@ -23,25 +23,25 @@ namespace VisualTankControl
     public partial class FrmMain : Form
     {
         private WebSocketServer _wsServer = null;
-        private WebSocket _webSocket = null;
-        private Chassis _chassis;
+        private static WebSocket _webSocket = null;
+        private static Chassis _chassis;
 
-        private int _maxSpeed = 70;
-        private int _minSpeed = 30;
+        private static int _maxSpeed = 70;
+        private static int _minSpeed = 30;
 
-        private int _gamepadY = 0;
-        private int _gamepadRotationZ = 0;
-        private int _gamepadZ = 0;
-        private int _gamepadX = 0;
+        public static int _gamepadY = 0;
+        private static int _gamepadRotationZ = 0;
+        public static int _gamepadZ = 0;
+        private static int _gamepadX = 0;
 
-        private string _lastJson = string.Empty;
+        private static string _lastJson = string.Empty;
 
         public FrmMain()
         {
             InitializeComponent();
         }
 
-        private void sendJson()
+        private static void sendJson()
         {
             ASCIIEncoding enc = new ASCIIEncoding();
             string jsonObject = JsonConvert.SerializeObject(_chassis);
@@ -93,7 +93,7 @@ namespace VisualTankControl
             }
         }
 
-        private void manageControllerInput()
+        public static void manageControllerInput()
         {
             _chassis.rightChainSpeed = _gamepadY;
             _chassis.leftChainSpeed = _gamepadY;
@@ -166,7 +166,7 @@ namespace VisualTankControl
             lblTankMaxSpeedVal.Text = _maxSpeed.ToString();
         }
 
-        public int remap(float from, float fromMin, float fromMax, float toMin, float toMax)
+        public static int remap(float from, float fromMin, float fromMax, float toMin, float toMax)
         {
             var fromAbs = from - fromMin;
             var fromMaxAbs = fromMax - fromMin;

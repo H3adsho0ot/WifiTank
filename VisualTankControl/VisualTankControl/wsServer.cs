@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,7 +14,21 @@ namespace VisualTankControl
     {
         protected override void OnMessage(MessageEventArgs e)
         {
-            Sessions.Broadcast("Jo");
+            try
+            {
+                GamePadInput input = JsonConvert.DeserializeObject<GamePadInput>(e.Data);
+
+                FrmMain._gamepadY = input.YAxis;
+                FrmMain._gamepadZ = input.ZAxis;
+
+                FrmMain.manageControllerInput();
+            }
+            catch
+            {
+                FrmMain._gamepadY = 0;
+                FrmMain._gamepadZ = 0;
+            }
+            //Sessions.Broadcast("Jo");
         }
     }
 }
