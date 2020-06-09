@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
-            this.btnSerialOpen = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnSerialUpdate = new System.Windows.Forms.Button();
-            this.cmbSerial = new System.Windows.Forms.ComboBox();
-            this.btnSerialClose = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lblTankMinSpeedVal = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,65 +41,16 @@
             this.websocketDiconnect = new System.Windows.Forms.Button();
             this.websocketConnect = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.groupBox1.SuspendLayout();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnServerStart = new System.Windows.Forms.Button();
+            this.btnGamepadStart = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMinSpeed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMaxSpeed)).BeginInit();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnSerialOpen
-            // 
-            this.btnSerialOpen.Location = new System.Drawing.Point(164, 18);
-            this.btnSerialOpen.Name = "btnSerialOpen";
-            this.btnSerialOpen.Size = new System.Drawing.Size(75, 22);
-            this.btnSerialOpen.TabIndex = 0;
-            this.btnSerialOpen.Text = "Open";
-            this.btnSerialOpen.UseVisualStyleBackColor = true;
-            this.btnSerialOpen.Click += new System.EventHandler(this.btnSerialOpen_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btnSerialUpdate);
-            this.groupBox1.Controls.Add(this.cmbSerial);
-            this.groupBox1.Controls.Add(this.btnSerialClose);
-            this.groupBox1.Controls.Add(this.btnSerialOpen);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(330, 53);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Serial";
-            // 
-            // btnSerialUpdate
-            // 
-            this.btnSerialUpdate.Location = new System.Drawing.Point(9, 19);
-            this.btnSerialUpdate.Name = "btnSerialUpdate";
-            this.btnSerialUpdate.Size = new System.Drawing.Size(22, 22);
-            this.btnSerialUpdate.TabIndex = 3;
-            this.btnSerialUpdate.Text = "↻";
-            this.btnSerialUpdate.UseVisualStyleBackColor = true;
-            this.btnSerialUpdate.Click += new System.EventHandler(this.btnSerialUpdate_Click);
-            // 
-            // cmbSerial
-            // 
-            this.cmbSerial.FormattingEnabled = true;
-            this.cmbSerial.Location = new System.Drawing.Point(37, 19);
-            this.cmbSerial.Name = "cmbSerial";
-            this.cmbSerial.Size = new System.Drawing.Size(121, 21);
-            this.cmbSerial.TabIndex = 2;
-            // 
-            // btnSerialClose
-            // 
-            this.btnSerialClose.Enabled = false;
-            this.btnSerialClose.Location = new System.Drawing.Point(245, 18);
-            this.btnSerialClose.Name = "btnSerialClose";
-            this.btnSerialClose.Size = new System.Drawing.Size(75, 22);
-            this.btnSerialClose.TabIndex = 1;
-            this.btnSerialClose.Text = "Close";
-            this.btnSerialClose.UseVisualStyleBackColor = true;
-            this.btnSerialClose.Click += new System.EventHandler(this.btnSerialClose_Click);
             // 
             // groupBox2
             // 
@@ -114,7 +60,7 @@
             this.groupBox2.Controls.Add(this.lblTankMaxSpeedVal);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.tbTankMaxSpeed);
-            this.groupBox2.Location = new System.Drawing.Point(12, 130);
+            this.groupBox2.Location = new System.Drawing.Point(12, 71);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(330, 131);
             this.groupBox2.TabIndex = 4;
@@ -174,20 +120,18 @@
             this.tbTankMaxSpeed.Size = new System.Drawing.Size(244, 45);
             this.tbTankMaxSpeed.TabIndex = 0;
             this.tbTankMaxSpeed.Scroll += new System.EventHandler(this.tbTankMaxSpeed_Scroll);
-            this.tbTankMaxSpeed.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbTankMaxSpeed_KeyDown);
-            this.tbTankMaxSpeed.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbTankMaxSpeed_KeyUp);
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.txtWebsocket);
             this.groupBox3.Controls.Add(this.websocketDiconnect);
             this.groupBox3.Controls.Add(this.websocketConnect);
-            this.groupBox3.Location = new System.Drawing.Point(12, 71);
+            this.groupBox3.Location = new System.Drawing.Point(12, 12);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(330, 53);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "WebSocket";
+            this.groupBox3.Text = "TankWebSocket";
             // 
             // txtWebsocket
             // 
@@ -222,26 +166,54 @@
             this.pictureBox1.Location = new System.Drawing.Point(357, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(240, 320);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnGamepadStart);
+            this.groupBox1.Controls.Add(this.btnServerStart);
+            this.groupBox1.Location = new System.Drawing.Point(12, 208);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(330, 53);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Server";
+            // 
+            // btnServerStart
+            // 
+            this.btnServerStart.Location = new System.Drawing.Point(6, 19);
+            this.btnServerStart.Name = "btnServerStart";
+            this.btnServerStart.Size = new System.Drawing.Size(90, 22);
+            this.btnServerStart.TabIndex = 0;
+            this.btnServerStart.Text = "Start Server";
+            this.btnServerStart.UseVisualStyleBackColor = true;
+            this.btnServerStart.Click += new System.EventHandler(this.btnServerStart_Click);
+            // 
+            // btnGamepadStart
+            // 
+            this.btnGamepadStart.Location = new System.Drawing.Point(102, 19);
+            this.btnGamepadStart.Name = "btnGamepadStart";
+            this.btnGamepadStart.Size = new System.Drawing.Size(90, 22);
+            this.btnGamepadStart.TabIndex = 1;
+            this.btnGamepadStart.Text = "Start Gamepad";
+            this.btnGamepadStart.UseVisualStyleBackColor = true;
+            this.btnGamepadStart.Click += new System.EventHandler(this.btnGamepadStart_Click);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(607, 340);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
-            this.Text = "VisualTankControl";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Text = "VisualTankControl Server";
             this.Load += new System.EventHandler(this.frmMain_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
-            this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbTankMinSpeed)).EndInit();
@@ -249,17 +221,13 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnSerialOpen;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button btnSerialClose;
-        private System.Windows.Forms.ComboBox cmbSerial;
-        private System.Windows.Forms.Button btnSerialUpdate;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TrackBar tbTankMaxSpeed;
@@ -272,6 +240,9 @@
         private System.Windows.Forms.Button websocketDiconnect;
         private System.Windows.Forms.Button websocketConnect;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnServerStart;
+        private System.Windows.Forms.Button btnGamepadStart;
     }
 }
 
