@@ -422,6 +422,7 @@ namespace VisualTankControl
             SetControlPropertyThreadSafe(pictureBox1, "Height", image.Height);
             //pictureBox1.Width = image.Width;
             //pictureBox1.Height = image.Height;
+            image.RotateFlip(RotateFlipType.Rotate90FlipNone);
             pictureBox1.Image = image;
             //Bitmap.FromStream(memStream).Save(@"C:\temp\img\img" + counter.ToString() + ".jpg");
             counter = counter + 1;

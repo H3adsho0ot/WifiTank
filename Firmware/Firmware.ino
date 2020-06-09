@@ -4,6 +4,7 @@
 #include <WebSocketsServer.h>
 
 #define CAMERA_MODEL_AI_THINKER
+#define LED_BUILTIN 4
 
 #include "camera_pins.h"
 #include "Config.h"
@@ -27,6 +28,7 @@ void setup()
   chassis.setup();
   Serial.begin(baudRate);
   Serial.setDebugOutput(true);
+  pinMode(LED_BUILTIN, OUTPUT);
 
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -53,22 +55,28 @@ void setup()
   //config.frame_size = FRAMESIZE_UXGA;
   //config.jpeg_quality = 10;
   //config.fb_count = 2;
-  config.frame_size = FRAMESIZE_SVGA;
-  config.jpeg_quality = 12;
-  config.fb_count = 1;
+  //config.frame_size = FRAMESIZE_SVGA;
+  //config.jpeg_quality = 12;
+  //config.fb_count = 1;
+  config.frame_size = FRAMESIZE_QVGA;
+  config.jpeg_quality = 10;
+  config.fb_count = 2;
 
   // camera init
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK)
   {
     Serial.printf("Camera init failed with error 0x%x", err);
+    digitalWrite(LED_BUILTIN, HIGH);
     return;
   }
 
   WiFi.begin(ssid, password);
   while ( WiFi.status() != WL_CONNECTED )
   {
+    digitalWrite(LED_BUILTIN, HIGH);
     delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
     Serial.print(".");
   }
 
