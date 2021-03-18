@@ -25,10 +25,12 @@ bool RCF = true;
 
 void setup()
 {
-  chassis.setup();
   Serial.begin(baudRate);
   Serial.setDebugOutput(true);
+  
   pinMode(LED_BUILTIN, OUTPUT);
+ 
+  chassis.setup();
 
   camera_config_t config;
   config.ledc_channel = LEDC_CHANNEL_0;
@@ -159,7 +161,7 @@ void loop()
     // Look for and handle WebSocket data
     webSocket.loop();
 
-    chassis.drive(LCS, LCF, RCS, RCF);
+    //chassis.drive(LCS, LCF, RCS, RCF);
 
     camera_fb_t *fb = esp_camera_fb_get();
 

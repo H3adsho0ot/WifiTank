@@ -1,14 +1,18 @@
 #ifndef Config_h
 #define Config_h
   //chassis
-  //drv8833
-  //chain right  
-  const int in1 = 14; 
-  const int in2 = 15;   
+  const int stepsPerRevolution = 200;
+  const int maxRPM = 500;   
+  const int accel = 100;
+  const int decel = 100;
   
+  //chain right  
+  const int rightDir = 14; 
+  const int rightStep = 15;
+   
   //chain left
-  const int in3 = 12;    
-  const int in4 = 13;  
+  const int leftDir = 12;    
+  const int leftStep = 13;  
   
   //Serial
   const unsigned long baudRate = 115200;

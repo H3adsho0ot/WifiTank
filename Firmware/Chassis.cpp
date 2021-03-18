@@ -4,25 +4,30 @@
 #include "Arduino.h"
 #include "Config.h"
 
+#include "A4988.h"
+
+
 class Chassis
 {
   private:
 
-    const int LEDC_CHANNEL_2 = 2;
+    /*const int LEDC_CHANNEL_2 = 2;
     const int LEDC_CHANNEL_3 = 3;
     const int LEDC_CHANNEL_4 = 4;
     const int LEDC_CHANNEL_5 = 5;
 
     const int LEDC_TIMER_8_BIT = 8;
-    const int LEDC_BASE_FREQ = 490;
+    const int LEDC_BASE_FREQ = 490;*/ 
+    A4988 leftStepper;  
 
   public:
-    Chassis()
+    Chassis() : leftStepper(stepsPerRevolution, leftDir, leftStep)
     {}
 
     void setup()
     {
-      pinMode(in1, OUTPUT);
+      //leftStepper(stepsPerRevolution, leftDir, leftStep);
+      /*pinMode(in1, OUTPUT);
       pinMode(in2, OUTPUT);
       pinMode(in3, OUTPUT);
       pinMode(in4, OUTPUT);
@@ -34,11 +39,14 @@ class Chassis
       ledcSetup(LEDC_CHANNEL_4, LEDC_BASE_FREQ, LEDC_TIMER_8_BIT);
       ledcAttachPin(in1, LEDC_CHANNEL_4);
       ledcSetup(LEDC_CHANNEL_5, LEDC_BASE_FREQ, LEDC_TIMER_8_BIT);
-      ledcAttachPin(in2, LEDC_CHANNEL_5);
+      ledcAttachPin(in2, LEDC_CHANNEL_5);*/
+      
+      leftStepper.setSpeedProfile(BasicStepperDriver::LINEAR_SPEED, accel, decel);
     }
 
     void drive(int leftChainSpeed, bool leftChainForward, int rightChainSpeed, bool rightChainForward)
     {
+      
       //map speed
       if (rightChainSpeed < 0)
       {
@@ -59,11 +67,19 @@ class Chassis
       }
 
       rightChainSpeed = map(rightChainSpeed, 0, 100, 0, 255);
-      leftChainSpeed = map(leftChainSpeed, 0, 100, 0, 255);
+      leftChainSpeed = map(leftChainSpeed, 0, 100, 0, maxRPM);
+
+            
+      leftStepper.begin(leftChainSpeed, 1);
+      if (leftChainForward)
+      {
+        leftStepper.rotate(360);
+      }
+      
 
       //set speed & direction
       //right chain
-      if (rightChainForward)
+      /*if (rightChainForward)
       {
         ledcWrite(LEDC_CHANNEL_4, rightChainSpeed);
         ledcWrite(LEDC_CHANNEL_5, 0);
@@ -84,7 +100,7 @@ class Chassis
       {
         ledcWrite(LEDC_CHANNEL_2, leftChainSpeed);
         ledcWrite(LEDC_CHANNEL_3, 0);
-      }
+      }*/
     }
 };
 
