@@ -161,7 +161,7 @@ void loop()
     // Look for and handle WebSocket data
     webSocket.loop();
 
-    //chassis.drive(LCS, LCF, RCS, RCF);
+    chassis.drive(LCS, LCF, RCS, RCF);
 
     camera_fb_t *fb = esp_camera_fb_get();
 

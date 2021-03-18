@@ -1,3 +1,5 @@
+#include <ESP_FlexyStepper.h>
+
 #ifndef Chassis_cpp
 #define Chassis_cpp
 
@@ -18,10 +20,11 @@ class Chassis
 
     const int LEDC_TIMER_8_BIT = 8;
     const int LEDC_BASE_FREQ = 490;*/ 
-    A4988 leftStepper;  
+    //A4988 leftStepper;  
+    ESP_FlexyStepper leftStepper;
 
   public:
-    Chassis() : leftStepper(stepsPerRevolution, leftDir, leftStep)
+    Chassis() //: leftStepper(stepsPerRevolution, leftDir, leftStep)
     {}
 
     void setup()
@@ -41,7 +44,15 @@ class Chassis
       ledcSetup(LEDC_CHANNEL_5, LEDC_BASE_FREQ, LEDC_TIMER_8_BIT);
       ledcAttachPin(in2, LEDC_CHANNEL_5);*/
       
-      leftStepper.setSpeedProfile(BasicStepperDriver::LINEAR_SPEED, accel, decel);
+      //leftStepper.setSpeedProfile(BasicStepperDriver::LINEAR_SPEED, accel, decel);
+
+      leftStepper.connectToPins(leftStep, leftDir);
+      leftStepper.setSpeedInStepsPerSecond(maxSpeed);
+      leftStepper.setAccelerationInStepsPerSecondPerSecond(accel);
+      leftStepper.setDecelerationInStepsPerSecondPerSecond(decel);
+      // Not start the stepper instance as a service in the "background" as a separate task
+      // and the OS of the ESP will take care of invoking the processMovement() task regularily so you can do whatever you want in the loop function
+      leftStepper.startAsService();
     }
 
     void drive(int leftChainSpeed, bool leftChainForward, int rightChainSpeed, bool rightChainForward)
@@ -67,13 +78,15 @@ class Chassis
       }
 
       rightChainSpeed = map(rightChainSpeed, 0, 100, 0, 255);
-      leftChainSpeed = map(leftChainSpeed, 0, 100, 0, maxRPM);
+      leftChainSpeed = map(leftChainSpeed, 0, 100, 0, maxSpeed);
 
             
-      leftStepper.begin(leftChainSpeed, 1);
-      if (leftChainForward)
+      //leftStepper.begin(leftChainSpeed, 1);
+      //leftStepper.setSpeedInStepsPerSecond(leftChainSpeed);
+      if (leftChainForward && leftChainSpeed > 0)
       {
-        leftStepper.rotate(360);
+        //leftStepper.rotate(360);
+        leftStepper.setTargetPositionRelativeInSteps(leftChainSpeed);
       }
       
 

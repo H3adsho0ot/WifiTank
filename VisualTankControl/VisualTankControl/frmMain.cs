@@ -26,8 +26,8 @@ namespace VisualTankControl
         private static WebSocket _webSocket = null;
         private static Chassis _chassis;
 
-        private static int _maxSpeed = 70;
-        private static int _minSpeed = 30;
+        private static int _maxSpeed = 100;
+        private static int _minSpeed = 0;
 
         public static int _gamepadY = 0;
         private static int _gamepadRotationZ = 0;

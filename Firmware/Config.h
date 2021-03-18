@@ -2,7 +2,7 @@
 #define Config_h
   //chassis
   const int stepsPerRevolution = 200;
-  const int maxRPM = 500;   
+  const int maxSpeed = 2000;   
   const int accel = 100;
   const int decel = 100;
   
