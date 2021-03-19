@@ -9,16 +9,27 @@ class Chassis
 {
   private:
     FastAccelStepperEngine engine = FastAccelStepperEngine();
-    FastAccelStepper *leftStepper = NULL;
+    FastAccelStepper *rightStepper = NULL;
+    FastAccelStepper *leftStepper = NULL;    
 
   public:
-    Chassis() //: leftStepper(stepsPerRevolution, leftDir, leftStep)
+    Chassis()
     {}
 
     void setup()
     {
       engine.init();
-      leftStepper = engine.stepperConnectToPin(leftStep);
+      
+      rightStepper = engine.stepperConnectToPin(rightStep);
+      leftStepper = engine.stepperConnectToPin(leftStep);     
+
+      if (rightStepper)
+      {
+        rightStepper->setDirectionPin(rightDir);
+        rightStepper->setAutoEnable(true);
+        rightStepper->setSpeedInUs(minSpeed);
+        rightStepper->setAcceleration(accel);
+      }
       
       if (leftStepper)
       {
@@ -50,32 +61,78 @@ class Chassis
         leftChainSpeed = 100;
       }
 
-      rightChainSpeed = map(rightChainSpeed, 0, 100, 0, 255);
+      rightChainSpeed = map(rightChainSpeed, 0, 100, minSpeed, maxSpeed);
       leftChainSpeed = map(leftChainSpeed, 0, 100, minSpeed, maxSpeed);
 
-      leftStepper->setAcceleration(accel);
+      //Right Chain
+      rightStepper->setAcceleration(accel);
       
-      bool braking = false;
-
-      int motorSpeed = leftStepper->getCurrentSpeedInUs();
-      if(motorSpeed > 0 && !leftChainForward  && leftChainSpeed != minSpeed)
+      bool rightBraking = false;
+      int rightMotorSpeed = rightStepper->getCurrentSpeedInUs();
+      
+      if(rightMotorSpeed > 0 && !rightChainForward  && rightChainSpeed != minSpeed)
       {
-        braking = true;
+        rightBraking = true;
       }
       else    
-      if(motorSpeed < 0 && leftChainForward && leftChainSpeed != minSpeed)
+      if(rightMotorSpeed < 0 && rightChainForward && rightChainSpeed != minSpeed)
       {
-        braking = true;
-        motorSpeed = motorSpeed * -1;
+        rightBraking = true;
+        rightMotorSpeed = rightMotorSpeed * -1;
       }
 
-      if(braking)
+      if(rightBraking)
+      {
+        rightChainSpeed = minSpeed;
+        rightStepper->setAcceleration(decel);
+      }
+   
+      if(rightMotorSpeed == minSpeed && rightChainSpeed == minSpeed)
+      {
+          rightStepper->stopMove();
+      }
+      else if(!rightStepper->isMotorRunning() && rightChainSpeed < minSpeed)
+      {        
+        rightStepper->setSpeedInUs(accel);
+        if(rightChainForward)
+        {
+          rightStepper->moveByAcceleration(accel, false);
+        }
+        else
+        {
+          rightStepper->moveByAcceleration(accel * -1, true);
+        }
+      }
+      else 
+      {
+        rightStepper->setSpeedInUs(rightChainSpeed);
+        rightStepper->applySpeedAcceleration();
+      }
+
+      //Left chain
+      leftStepper->setAcceleration(accel);
+      
+      bool leftBraking = false;
+      int leftMotorSpeed = leftStepper->getCurrentSpeedInUs();
+      
+      if(leftMotorSpeed > 0 && !leftChainForward  && leftChainSpeed != minSpeed)
+      {
+        leftBraking = true;
+      }
+      else    
+      if(leftMotorSpeed < 0 && leftChainForward && leftChainSpeed != minSpeed)
+      {
+        leftBraking = true;
+        leftMotorSpeed = leftMotorSpeed * -1;
+      }
+
+      if(leftBraking)
       {
         leftChainSpeed = minSpeed;
         leftStepper->setAcceleration(decel);
       }
    
-      if(motorSpeed == minSpeed && leftChainSpeed == minSpeed)
+      if(leftMotorSpeed == minSpeed && leftChainSpeed == minSpeed)
       {
           leftStepper->stopMove();
       }

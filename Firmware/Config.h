@@ -7,12 +7,12 @@
   const int decel =900;
   
   //chain right  
-  const int rightDir = 14; 
-  const int rightStep = 15;
+  const int rightDir = 12; 
+  const int rightStep = 13;
    
   //chain left
-  const int leftDir = 12;    
-  const int leftStep = 13;  
+  const int leftDir = 14;    
+  const int leftStep = 15;  
   
   //Serial
   const unsigned long baudRate = 115200;
