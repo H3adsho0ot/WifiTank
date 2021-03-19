@@ -1,10 +1,9 @@
 #ifndef Config_h
 #define Config_h
   //chassis
-  const int stepsPerRevolution = 200;
-  const int maxSpeed = 2000;   
-  const int accel = 100;
-  const int decel = 100;
+  const int maxSpeed = 500;   
+  const int minSpeed = 5000;
+  const int accel = 300;
   
   //chain right  
   const int rightDir = 14; 
