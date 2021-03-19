@@ -1,8 +1,8 @@
 #ifndef Config_h
 #define Config_h
   //chassis
-  const int maxSpeed = 500;   
-  const int minSpeed = 5000;
+  const int maxSpeed = 400;   
+  const int minSpeed = 3100;
   const int accel = 400;
   const int decel =900;
   
