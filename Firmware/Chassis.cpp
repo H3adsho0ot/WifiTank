@@ -70,15 +70,14 @@ class Chassis
       bool rightBraking = false;
       int rightMotorSpeed = rightStepper->getCurrentSpeedInUs();
       
-      if(rightMotorSpeed > 0 && !rightChainForward  && rightChainSpeed != minSpeed)
-      {
-        rightBraking = true;
-      }
-      else    
-      if(rightMotorSpeed < 0 && rightChainForward && rightChainSpeed != minSpeed)
+      if(rightMotorSpeed < 0 && !rightChainForward  && rightChainSpeed != minSpeed)
       {
         rightBraking = true;
         rightMotorSpeed = rightMotorSpeed * -1;
+      }
+      else if(rightMotorSpeed > 0 && rightChainForward && rightChainSpeed != minSpeed)
+      {
+        rightBraking = true;        
       }
 
       if(rightBraking)
@@ -96,11 +95,11 @@ class Chassis
         rightStepper->setSpeedInUs(accel);
         if(rightChainForward)
         {
-          rightStepper->moveByAcceleration(accel, false);
+          rightStepper->moveByAcceleration(accel * -1, true);          
         }
         else
         {
-          rightStepper->moveByAcceleration(accel * -1, true);
+          rightStepper->moveByAcceleration(accel, false);
         }
       }
       else 
@@ -119,8 +118,7 @@ class Chassis
       {
         leftBraking = true;
       }
-      else    
-      if(leftMotorSpeed < 0 && leftChainForward && leftChainSpeed != minSpeed)
+      else if(leftMotorSpeed < 0 && leftChainForward && leftChainSpeed != minSpeed)
       {
         leftBraking = true;
         leftMotorSpeed = leftMotorSpeed * -1;
