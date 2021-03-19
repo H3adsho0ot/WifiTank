@@ -53,15 +53,17 @@ class Chassis
       rightChainSpeed = map(rightChainSpeed, 0, 100, 0, 255);
       leftChainSpeed = map(leftChainSpeed, 0, 100, minSpeed, maxSpeed);
 
+      leftStepper->setAcceleration(accel);
+      
       bool braking = false;
 
       int motorSpeed = leftStepper->getCurrentSpeedInUs();
-      if(motorSpeed > 0 && !leftChainForward)
+      if(motorSpeed > 0 && !leftChainForward  && leftChainSpeed != minSpeed)
       {
         braking = true;
       }
       else    
-      if(motorSpeed < 0 && leftChainForward)
+      if(motorSpeed < 0 && leftChainForward && leftChainSpeed != minSpeed)
       {
         braking = true;
         motorSpeed = motorSpeed * -1;
@@ -70,6 +72,7 @@ class Chassis
       if(braking)
       {
         leftChainSpeed = minSpeed;
+        leftStepper->setAcceleration(decel);
       }
       
       if(motorSpeed == minSpeed && leftChainSpeed == minSpeed)

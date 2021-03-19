@@ -3,7 +3,8 @@
   //chassis
   const int maxSpeed = 500;   
   const int minSpeed = 5000;
-  const int accel = 300;
+  const int accel = 400;
+  const int decel =900;
   
   //chain right  
   const int rightDir = 14; 
