@@ -72,12 +72,16 @@ class Chassis
       
       if(rightMotorSpeed < 0 && !rightChainForward  && rightChainSpeed != minSpeed)
       {
-        rightBraking = true;
-        rightMotorSpeed = rightMotorSpeed * -1;
+        rightBraking = true;        
       }
       else if(rightMotorSpeed > 0 && rightChainForward && rightChainSpeed != minSpeed)
       {
         rightBraking = true;        
+      }
+
+      if(rightMotorSpeed < 0)
+      {
+        rightMotorSpeed = rightMotorSpeed * -1;
       }
 
       if(rightBraking)
@@ -121,6 +125,10 @@ class Chassis
       else if(leftMotorSpeed < 0 && leftChainForward && leftChainSpeed != minSpeed)
       {
         leftBraking = true;
+      }
+
+      if(leftMotorSpeed < 0)
+      {
         leftMotorSpeed = leftMotorSpeed * -1;
       }
 
